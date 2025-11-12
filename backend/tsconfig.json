@@ -3,14 +3,14 @@
     "target": "ES2022",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
-    "outDir": "dist",
     "rootDir": "src",
-    "esModuleInterop": true,
+    "outDir": "dist",
     "strict": true,
+    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-  // "types" removed to let TypeScript auto-detect installed types
+    "types": ["node", "express", "cors"]
   },
-  "include": ["src/**/*", "src/types/**/*"]
+  "include": ["src/**/*"]
 }
