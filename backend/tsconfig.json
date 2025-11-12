@@ -10,7 +10,7 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "types": ["node", "express", "cors"]
+  // "types" removed to let TypeScript auto-detect installed types
   },
   "include": ["src/**/*"]
 }
