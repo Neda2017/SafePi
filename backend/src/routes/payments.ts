@@ -2,22 +2,27 @@ import { Router, Request, Response } from "express";
 
 const router = Router();
 
-/**
- * Demo endpoint to simulate Pi payment completion.
- * In production, you’ll verify the Pi Network payment server-side here.
- */
-router.post("/complete", async (req: Request, res: Response) => {
+interface PaymentRequestBody {
+  user?: string;
+  amount?: number;
+  txid?: string;
+}
+
+// === POST /api/payments/complete ===
+router.post("/complete", async (req: Request<{}, {}, PaymentRequestBody>, res: Response) => {
   try {
     const { user, amount, txid } = req.body;
-    const parsedAmount = Number(amount);
+
+    // Parse and validate amount
+    const parsedAmount = typeof amount === "number" ? amount : Number(amount);
 
     if (!user || isNaN(parsedAmount) || parsedAmount <= 0) {
       return res.status(400).json({ success: false, message: "Invalid payment data" });
     }
 
-    // Simulate confirmation
     console.log("💰 Payment received:", { user, amount: parsedAmount, txid });
 
+    // Simulate payment success response
     return res.json({
       success: true,
       message: "Payment confirmed successfully",
