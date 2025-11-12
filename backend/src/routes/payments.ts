@@ -1,19 +1,12 @@
-import { Router, Request, Response } from "express";
+import express from "express";
 
-const router = Router();
+const router = express.Router();
 
-interface PaymentRequestBody {
-  user?: string;
-  amount?: number | string;
-  txid?: string;
-}
-
-// === POST /api/payments/complete ===
-router.post("/complete", async (req: Request<{}, {}, PaymentRequestBody>, res: Response): Promise<void> => {
+router.post("/complete", async (req, res) => {
   try {
     const { user, amount, txid } = req.body;
 
-    const parsedAmount = typeof amount === "number" ? amount : Number(amount);
+    const parsedAmount = Number(amount);
 
     if (!user || isNaN(parsedAmount) || parsedAmount <= 0) {
       res.status(400).json({ success: false, message: "Invalid payment data" });
@@ -37,4 +30,3 @@ router.post("/complete", async (req: Request<{}, {}, PaymentRequestBody>, res: R
 });
 
 export default router;
-

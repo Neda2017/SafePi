@@ -1,8 +1,8 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import path from "path";
-import paymentsRouter from "./routes/payments.js";
+import paymentsRouter from "./routes/payments";
 
 dotenv.config();
 
@@ -11,8 +11,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// === Root health check ===
-app.get("/", (_req: Request, res: Response): void => {
+// === Health check ===
+app.get("/", (_req, res) => {
   res.json({
     ok: true,
     message: "✅ SafePi backend is live and running",
@@ -21,7 +21,7 @@ app.get("/", (_req: Request, res: Response): void => {
 });
 
 // === Validation key for Pi Network verification ===
-app.get("/validation-key.txt", (_req: Request, res: Response): void => {
+app.get("/validation-key.txt", (_req, res) => {
   res
     .type("text/plain")
     .send(
@@ -29,7 +29,7 @@ app.get("/validation-key.txt", (_req: Request, res: Response): void => {
     );
 });
 
-// === Mount payments routes ===
+// === Payment routes ===
 app.use("/api/payments", paymentsRouter);
 
 // === Serve static frontend if needed ===
@@ -37,6 +37,6 @@ const publicPath = path.join(process.cwd(), "public");
 app.use(express.static(publicPath));
 
 const PORT = process.env.PORT || 10000;
-app.listen(PORT, (): void => {
+app.listen(PORT, () => {
   console.log(`✅ SafePi backend running on port ${PORT}`);
 });

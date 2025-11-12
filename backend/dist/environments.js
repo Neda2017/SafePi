@@ -1,4 +1,7 @@
-export const env = {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.env = void 0;
+exports.env = {
     nodeEnv: process.env.NODE_ENV || "production",
     port: parseInt(process.env.PORT || "10000", 10),
     frontendUrl: process.env.FRONTEND_URL || "https://safepi.onrender.com",

@@ -1,19 +1,20 @@
-import { Router } from "express";
-const router = Router();
-/**
- * Demo endpoint to simulate Pi payment completion.
- * In production, you’ll verify the Pi Network payment server-side here.
- */
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const router = express_1.default.Router();
 router.post("/complete", async (req, res) => {
     try {
         const { user, amount, txid } = req.body;
         const parsedAmount = Number(amount);
         if (!user || isNaN(parsedAmount) || parsedAmount <= 0) {
-            return res.status(400).json({ success: false, message: "Invalid payment data" });
+            res.status(400).json({ success: false, message: "Invalid payment data" });
+            return;
         }
-        // Simulate confirmation
         console.log("💰 Payment received:", { user, amount: parsedAmount, txid });
-        return res.json({
+        res.json({
             success: true,
             message: "Payment confirmed successfully",
             txid: txid || "demo-txid",
@@ -21,10 +22,10 @@ router.post("/complete", async (req, res) => {
     }
     catch (error) {
         console.error("Payment error:", error);
-        return res.status(500).json({
+        res.status(500).json({
             success: false,
             message: "Internal server error",
         });
     }
 });
-export default router;
+exports.default = router;
