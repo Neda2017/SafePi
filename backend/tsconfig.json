@@ -12,5 +12,5 @@
     "resolveJsonModule": true,
   // "types" removed to let TypeScript auto-detect installed types
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "src/types/**/*"]
 }
