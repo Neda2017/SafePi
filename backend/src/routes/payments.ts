@@ -4,33 +4,32 @@ const router = Router();
 
 interface PaymentRequestBody {
   user?: string;
-  amount?: number;
+  amount?: number | string;
   txid?: string;
 }
 
 // === POST /api/payments/complete ===
-router.post("/complete", async (req: Request<{}, {}, PaymentRequestBody>, res: Response) => {
+router.post("/complete", async (req: Request<{}, {}, PaymentRequestBody>, res: Response): Promise<void> => {
   try {
     const { user, amount, txid } = req.body;
 
-    // Parse and validate amount
     const parsedAmount = typeof amount === "number" ? amount : Number(amount);
 
     if (!user || isNaN(parsedAmount) || parsedAmount <= 0) {
-      return res.status(400).json({ success: false, message: "Invalid payment data" });
+      res.status(400).json({ success: false, message: "Invalid payment data" });
+      return;
     }
 
     console.log("💰 Payment received:", { user, amount: parsedAmount, txid });
 
-    // Simulate payment success response
-    return res.json({
+    res.json({
       success: true,
       message: "Payment confirmed successfully",
       txid: txid || "demo-txid",
     });
   } catch (error) {
     console.error("Payment error:", error);
-    return res.status(500).json({
+    res.status(500).json({
       success: false,
       message: "Internal server error",
     });
@@ -38,3 +37,4 @@ router.post("/complete", async (req: Request<{}, {}, PaymentRequestBody>, res: R
 });
 
 export default router;
+
