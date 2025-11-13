@@ -1,0 +1,59 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const cors_1 = __importDefault(require("cors"));
+const app = (0, express_1.default)();
+// ---- ENVIRONMENT ----
+const PORT = Number(process.env.PORT) || 10000;
+const FRONTEND_URL = process.env.FRONTEND_URL || "https://safepi-botj.onrender.com";
+const PI_APP_ID = process.env.PI_APP_ID || "safeedfafd9724";
+const PI_VALIDATION_KEY = process.env.PI_VALIDATION_KEY || "";
+// ---- MIDDLEWARE ----
+app.use(express_1.default.json());
+app.use((0, cors_1.default)({
+    origin: FRONTEND_URL,
+    credentials: false,
+}));
+// ---- ROUTES ----
+// Root – quick health/info
+app.get("/", (_req, res) => {
+    res.status(200).json({
+        ok: true,
+        message: "SafePi backend is running 🚀",
+        appId: PI_APP_ID,
+    });
+});
+app.get("/health", (_req, res) => {
+    res.status(200).json({ status: "ok" });
+});
+// Pi domain validation file
+app.get("/validation-key.txt", (_req, res) => {
+    if (!PI_VALIDATION_KEY) {
+        return res
+            .status(500)
+            .type("text/plain")
+            .send("pi-verification-key-missing");
+    }
+    res
+        .status(200)
+        .type("text/plain")
+        .send(`pi-verification=${PI_VALIDATION_KEY}`);
+});
+// Payment completion endpoint used by the frontend
+app.post("/api/payments/complete", (req, res) => {
+    const { txid } = req.body ?? {};
+    // For now just echo success – you can plug in real Pi validation later
+    res.status(200).json({
+        success: true,
+        message: "Payment confirmed successfully (demo backend)",
+        txid: txid || "demo-123",
+    });
+});
+// ---- START SERVER ----
+app.listen(PORT, () => {
+    console.log(`✅ SafePi backend listening on ${PORT}`);
+    console.log(`🔐 CORS allowed origin: ${FRONTEND_URL}`);
+});

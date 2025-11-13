@@ -1,17 +1,17 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "ES2020",
+    "module": "CommonJS",
     "moduleResolution": "Node",
-    "outDir": "dist",
-    "rootDir": "src",
-    "strict": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
+    "strict": true,
     "skipLibCheck": true,
     
-    "types": ["node"], 
-    "resolveJsonModule": true
+    "outDir": "dist",
+    "rootDir": "src",
+
+    "types": ["node", "express", "cors"]
   },
-  "include": ["src"]
+  "include": ["src/**/*"]
 }
