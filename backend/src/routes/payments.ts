@@ -1,12 +1,32 @@
-import type { Request, Response } from "express";
+import { Router, type Request, type Response } from "express";
 
-export function mountPayments(app: any) {
-  app.post("/payments/complete", async (req: Request, res: Response) => {
-    try {
-      const body = req.body || {};
-      return res.status(200).json({ ok: true, message: "Payment recorded", received: body });
-    } catch (err: any) {
-      return res.status(500).json({ ok: false, error: err?.message || "error" });
-    }
-  });
-}
+const router = Router();
+
+// POST /api/payments
+router.post("/", async (req: Request, res: Response) => {
+  try {
+    res.json({
+      success: true,
+      message: "Payment initialized"
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: "Internal server error" });
+  }
+});
+
+// POST /api/payments/complete
+router.post("/complete", async (req: Request, res: Response) => {
+  try {
+    const txid = req.body?.txid || "demo-123";
+
+    res.json({
+      success: true,
+      message: "Payment confirmed successfully",
+      txid
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: "Internal server error" });
+  }
+});
+
+export default router;

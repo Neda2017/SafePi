@@ -1,14 +1,31 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.mountPayments = mountPayments;
-function mountPayments(app) {
-    app.post("/payments/complete", async (req, res) => {
-        try {
-            const body = req.body || {};
-            return res.status(200).json({ ok: true, message: "Payment recorded", received: body });
-        }
-        catch (err) {
-            return res.status(500).json({ ok: false, error: err?.message || "error" });
-        }
-    });
-}
+const express_1 = require("express");
+const router = (0, express_1.Router)();
+// POST /api/payments
+router.post("/", async (req, res) => {
+    try {
+        res.json({
+            success: true,
+            message: "Payment initialized"
+        });
+    }
+    catch (err) {
+        res.status(500).json({ success: false, error: "Internal server error" });
+    }
+});
+// POST /api/payments/complete
+router.post("/complete", async (req, res) => {
+    try {
+        const txid = req.body?.txid || "demo-123";
+        res.json({
+            success: true,
+            message: "Payment confirmed successfully",
+            txid
+        });
+    }
+    catch (err) {
+        res.status(500).json({ success: false, error: "Internal server error" });
+    }
+});
+exports.default = router;
