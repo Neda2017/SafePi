@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.mountPayments = mountPayments;
-function mountPayments(app) {
+export function mountPayments(app) {
     app.post("/payments/complete", async (req, res) => {
         try {
             const body = req.body || {};

@@ -1,31 +1,69 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import cors from "cors";
-import { env } from "./environments.js";
-import path from "path";
-import { fileURLToPath } from "url";
-import { mountPayments } from "./routes/payments.js";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const app = express();
 
+// ---- ENVIRONMENT ----
+const PORT = Number(process.env.PORT) || 10000;
+const FRONTEND_URL =
+  process.env.FRONTEND_URL || "https://safepi-botj.onrender.com";
+const PI_APP_ID = process.env.PI_APP_ID || "safeedfafd9724";
+const PI_VALIDATION_KEY = process.env.PI_VALIDATION_KEY || "";
+
+// ---- MIDDLEWARE ----
 app.use(express.json());
-app.use(cors({ origin: env.frontendUrl || true, credentials: false }));
 
-app.get("/", (_req, res) => {
-  res.status(200).json({ ok: true, app: "SafePi", env: env.nodeEnv, appId: env.piAppId });
+app.use(
+  cors({
+    origin: FRONTEND_URL,
+    credentials: false,
+  })
+);
+
+// ---- ROUTES ----
+
+// Root – quick health/info
+app.get("/", (_req: Request, res: Response) => {
+  res.status(200).json({
+    ok: true,
+    message: "SafePi backend is running 🚀",
+    appId: PI_APP_ID,
+  });
 });
 
-app.get("/validation-key.txt", (_req, res) => {
-  res.type("text/plain").send(env.validationKey);
+app.get("/health", (_req: Request, res: Response) => {
+  res.status(200).json({ status: "ok" });
 });
 
-mountPayments(app);
+// Pi domain validation file
+app.get("/validation-key.txt", (_req: Request, res: Response) => {
+  if (!PI_VALIDATION_KEY) {
+    return res
+      .status(500)
+      .type("text/plain")
+      .send("pi-verification-key-missing");
+  }
 
-app.use((_req, res) => res.status(404).json({ ok: false, error: "Not Found" }));
+  res
+    .status(200)
+    .type("text/plain")
+    .send(`pi-verification=${PI_VALIDATION_KEY}`);
+});
 
-app.listen(env.port, () => {
-  console.log(`✅ SafePi backend listening on ${env.port}`);
-  console.log(`🔐 CORS allowed origin: ${env.frontendUrl}`);
+// Payment completion endpoint used by the frontend
+app.post("/api/payments/complete", (req: Request, res: Response) => {
+  const { txid } = req.body ?? {};
+
+  // For now just echo success – you can plug in real Pi validation later
+  res.status(200).json({
+    success: true,
+    message: "Payment confirmed successfully (demo backend)",
+    txid: txid || "demo-123",
+  });
+});
+
+// ---- START SERVER ----
+app.listen(PORT, () => {
+  console.log(`✅ SafePi backend listening on ${PORT}`);
+  console.log(`🔐 CORS allowed origin: ${FRONTEND_URL}`);
 });
