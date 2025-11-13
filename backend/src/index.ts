@@ -1,39 +1,32 @@
-import express, { type Request, type Response } from "express";
+import express, { Request, Response } from "express";
 import cors from "cors";
-import path from "path";
-import { ENV } from "./environments";
-import paymentsRouter from "./routes/payments";
+import dotenv from "dotenv";
+import paymentsRouter from "./routes/payments.js";
+
+dotenv.config();
 
 const app = express();
-
-// Allow JSON body
 app.use(express.json());
 
-// Allow frontend
 app.use(
   cors({
-    origin: ENV.FRONTEND_URL,
-    methods: ["GET", "POST"],
-    credentials: true
+    origin: process.env.CORS_ORIGIN || "*",
   })
 );
 
 // Health check
-app.get("/", (_req: Request, res: Response) => {
-  res.json({ ok: true, message: "SafePi backend live", appId: ENV.APP_ID });
+app.get("/", (req: Request, res: Response) => {
+  res.json({
+    ok: true,
+    message: "SafePi backend is running",
+    appId: process.env.PI_APP_ID || "missing"
+  });
 });
 
-// Static validation file
-app.get("/validation-key.txt", (_req: Request, res: Response) => {
-  res.setHeader("Content-Type", "text/plain");
-  res.send(ENV.VALIDATION_KEY);
-});
-
-// Payments routes
+// Payments API
 app.use("/api/payments", paymentsRouter);
 
-// Start server
-app.listen(Number(ENV.PORT), () => {
-  console.log(`\n✅ SafePi backend listening on ${ENV.PORT}`);
-  console.log(`🔐 CORS allowed origin: ${ENV.FRONTEND_URL}`);
+const PORT = Number(process.env.PORT) || 10000;
+app.listen(PORT, () => {
+  console.log(`🚀 SafePi backend running on port ${PORT}`);
 });
