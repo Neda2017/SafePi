@@ -1,23 +1,12 @@
-import express from "express";
+import type { Request, Response } from "express";
 
-const router = express.Router();
-
-// Example endpoint: POST /api/payments/complete
-router.post("/complete", (req, res) => {
-  const { user, amount, txid } = req.body;
-
-  if (!user || !amount || !txid) {
-    return res.status(400).json({ success: false, message: "Invalid payment data" });
-  }
-
-  // Simulate payment confirmation logic
-  console.log(`💰 Payment received from ${user}: ${amount}π (txid: ${txid})`);
-
-  res.json({
-    success: true,
-    message: "Payment confirmed successfully",
-    txid,
+export function mountPayments(app: any) {
+  app.post("/payments/complete", async (req: Request, res: Response) => {
+    try {
+      const body = req.body || {};
+      return res.status(200).json({ ok: true, message: "Payment recorded", received: body });
+    } catch (err: any) {
+      return res.status(500).json({ ok: false, error: err?.message || "error" });
+    }
   });
-});
-
-export default router;
+}

@@ -5,33 +5,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
-const dotenv_1 = __importDefault(require("dotenv"));
+const environments_js_1 = require("./environments.js");
 const path_1 = __importDefault(require("path"));
-const payments_1 = __importDefault(require("./routes/payments"));
-dotenv_1.default.config();
+const url_1 = require("url");
+const payments_js_1 = require("./routes/payments.js");
+const __filename = (0, url_1.fileURLToPath)(import.meta.url);
+const __dirname = path_1.default.dirname(__filename);
 const app = (0, express_1.default)();
-app.use((0, cors_1.default)());
 app.use(express_1.default.json());
-// === Health check ===
+app.use((0, cors_1.default)({ origin: environments_js_1.env.frontendUrl || true, credentials: false }));
 app.get("/", (_req, res) => {
-    res.json({
-        ok: true,
-        message: "✅ SafePi backend is live and running",
-        appId: process.env.PI_APP_ID || "safeedfafd9724",
-    });
+    res.status(200).json({ ok: true, app: "SafePi", env: environments_js_1.env.nodeEnv, appId: environments_js_1.env.piAppId });
 });
-// === Validation key for Pi Network verification ===
 app.get("/validation-key.txt", (_req, res) => {
-    res
-        .type("text/plain")
-        .send("8a88ce9cb21e9d6fa7f91efd40400b9db6a4534cc5f0c773c930d02e3338d635e27aaea00ce96d2f6565f96c70bb14dfa557b8a9d59836ebf9ed43ba62d96029");
+    res.type("text/plain").send(environments_js_1.env.validationKey);
 });
-// === Payment routes ===
-app.use("/api/payments", payments_1.default);
-// === Serve static frontend if needed ===
-const publicPath = path_1.default.join(process.cwd(), "public");
-app.use(express_1.default.static(publicPath));
-const PORT = process.env.PORT || 10000;
-app.listen(PORT, () => {
-    console.log(`✅ SafePi backend running on port ${PORT}`);
+(0, payments_js_1.mountPayments)(app);
+app.use((_req, res) => res.status(404).json({ ok: false, error: "Not Found" }));
+app.listen(environments_js_1.env.port, () => {
+    console.log(`✅ SafePi backend listening on ${environments_js_1.env.port}`);
+    console.log(`🔐 CORS allowed origin: ${environments_js_1.env.frontendUrl}`);
 });
