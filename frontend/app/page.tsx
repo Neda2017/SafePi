@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { createPayment, completePayment } from "@/lib/api";
+import { createPayment } from "@/lib/api";
 
 export default function HomePage() {
   async function handlePayment() {
