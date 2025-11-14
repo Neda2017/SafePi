@@ -1,9 +1,12 @@
 export async function createPayment(amount: number) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/payments/create`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ amount }),
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/payments/create`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ amount }),
+    }
+  );
 
   if (!res.ok) throw new Error("Failed to create payment");
   return res.json();
