@@ -1,14 +1,15 @@
-import express, { Request, Response } from "express";
+import express = require("express");
 
 const router = express.Router();
 
-// Mock verification route
-router.post("/complete", async (req: Request, res: Response) => {
-  return res.json({
-    success: true,
-    message: "Payment confirmed successfully",
-    txid: "demo-123"
-  });
+router.post("/create", (req, res) => {
+  console.log("Payment create request:", req.body);
+  res.json({ success: true, paymentId: "demo-123" });
 });
 
-export default router;
+router.post("/complete", (req, res) => {
+  console.log("Payment completed:", req.body);
+  res.json({ success: true, txid: "demo-tx-999" });
+});
+
+export = router;
