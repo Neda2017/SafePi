@@ -8,17 +8,15 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const PORT = process.env.PORT || 3000;
-
-// Test endpoint
 app.get("/", (_req, res) => {
-  res.json({ ok: true, message: "SafePi backend running", port: PORT });
+  res.json({ ok: true, message: "SafePi backend running" });
 });
 
-// Payments routes
-import paymentsRouter = require("./routes/payments");
+// Payments router
+const paymentsRouter = require("./routes/payments");
 app.use("/api/payments", paymentsRouter);
 
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🚀 SafePi backend running on port ${PORT}`);
 });
