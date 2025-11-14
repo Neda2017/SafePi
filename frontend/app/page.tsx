@@ -1,67 +1,110 @@
 "use client";
 
-import React from "react";
-import { createPayment complete Payment } from "@/lib/api";
+import { useState } from "react";
+import { createPayment, completePayment } from "@/lib/api";
 
 export default function HomePage() {
-  async function handlePayment() {
-    try {
-      // 1️⃣ Tell backend to create a payment request
-      const payment = await createPayment(1); // 1 Pi (or any amount)
-      console.log("Payment created:", payment);
+  const [loading, setLoading] = useState(false);
+  const [paymentStatus, setPaymentStatus] = useState("");
 
-      // 2️⃣ Placeholder until Pi Browser SDK is added
-      const txid = "demo-txid-123"; 
-      console.log("Simulated txid:", txid);
+  // Pi SDK global object
+  const Pi = typeof window !== "undefined" ? (window as any).Pi : null;
 
-      // 3️⃣ Confirm payment on backend
-      const completed = await completePayment(payment.paymentId, txid);
-      console.log("Payment completed:", completed);
-
-      alert("Payment simulation completed successfully!");
-    } catch (error) {
-      console.error("Payment failed:", error);
-      alert("Payment failed — check console.");
+  const handleSignIn = async () => {
+    if (!Pi) {
+      alert("Pi SDK not detected. Open the app inside Pi Browser.");
+      return;
     }
-  }
+
+    setLoading(true);
+    setPaymentStatus("");
+
+    try {
+      console.log("Requesting Pi authentication…");
+
+      const scopes = ["payments"];
+      const auth = await Pi.authenticate(scopes);
+
+      console.log("Pi user authenticated:", auth);
+
+      setPaymentStatus("Authentication successful.");
+    } catch (err: any) {
+      console.error("Sign-in failed:", err);
+      setPaymentStatus("Sign-in failed.");
+    }
+
+    setLoading(false);
+  };
+
+  const handlePayment = async () => {
+    if (!Pi) {
+      alert("Pi SDK not detected. Open the app inside Pi Browser.");
+      return;
+    }
+
+    setLoading(true);
+    setPaymentStatus("");
+
+    try {
+      // 1) Tell backend to create a new payment
+      const { paymentId, amount } = await createPayment();
+
+      console.log("Backend created payment:", paymentId);
+
+      // 2) Start Pi payment flow
+      const payment = await Pi.createPayment({
+        amount,
+        memo: "SafePi Purchase",
+        metadata: { paymentId },
+      });
+
+      console.log("Payment submitted:", payment);
+
+      // 3) When blockchain confirms & Pi calls us back:
+      Pi.on("completed", async (payment: any) => {
+        console.log("Payment completed callback:", payment);
+
+        await completePayment(payment.identifier);
+        setPaymentStatus("Payment completed successfully!");
+      });
+
+      Pi.on("error", (err: any) => {
+        console.error("Pi payment error:", err);
+        setPaymentStatus("Payment failed.");
+      });
+
+      setPaymentStatus("Waiting for Pi Network confirmation...");
+    } catch (err: any) {
+      console.error("Payment error:", err);
+      setPaymentStatus("Payment failed.");
+    }
+
+    setLoading(false);
+  };
 
   return (
-    <main style={styles.container}>
-      <h1 style={styles.title}>SafePi Payment Demo</h1>
-      <p style={styles.subtitle}>
-        Click the button below to simulate a Pi payment.
-      </p>
+    <main className="p-8 text-center">
+      <h1 className="text-3xl font-bold mb-6">SafePi Shop</h1>
 
-      <button style={styles.button} onClick={handlePayment}>
-        Pay with Pi
+      <button
+        onClick={handleSignIn}
+        disabled={loading}
+        className="px-6 py-3 bg-purple-600 text-white rounded-lg shadow-md mb-4"
+      >
+        {loading ? "Processing…" : "Sign in with Pi"}
       </button>
+
+      <br />
+
+      <button
+        onClick={handlePayment}
+        disabled={loading}
+        className="px-6 py-3 bg-green-600 text-white rounded-lg shadow-md"
+      >
+        {loading ? "Processing…" : "Buy with Pi"}
+      </button>
+
+      <p className="mt-6 text-lg">{paymentStatus}</p>
     </main>
   );
 }
-
-const styles: { [key: string]: React.CSSProperties } = {
-  container: {
-    textAlign: "center",
-    padding: "40px",
-    fontFamily: "Arial, sans-serif",
-  },
-  title: {
-    fontSize: "32px",
-    fontWeight: "bold",
-    marginBottom: "10px",
-  },
-  subtitle: {
-    fontSize: "16px",
-    marginBottom: "20px",
-    color: "#666",
-  },
-  button: {
-    backgroundColor: "#ffcc00",
-    border: "none",
-    padding: "12px 26px",
-    borderRadius: "8px",
-    fontSize: "16px",
-    fontWeight: "bold",
-    cursor: "pointer",
-  },
-};
