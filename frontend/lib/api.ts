@@ -1,27 +1,31 @@
-export async function createPayment(amount: number) {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/payments/create`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ amount }),
-    }
-  );
+export async function createPayment() {
+  const API = process.env.NEXT_PUBLIC_API_URL;
 
-  if (!res.ok) throw new Error("Failed to create payment");
-  return res.json();
+  const res = await fetch(`${API}/api/payments/create`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({}), // no arguments needed
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to create payment");
+  }
+
+  return res.json(); // { paymentId, amount }
 }
 
-export async function completePayment(paymentId: string, txid: string) {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/payments/complete`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ paymentId, txid }),
-    }
-  );
+export async function completePayment(paymentId: string) {
+  const API = process.env.NEXT_PUBLIC_API_URL;
 
-  if (!res.ok) throw new Error("Failed to complete payment");
+  const res = await fetch(`${API}/api/payments/complete`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ paymentId }),
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to confirm payment");
+  }
+
   return res.json();
 }
