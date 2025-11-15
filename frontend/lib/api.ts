@@ -1,30 +1,33 @@
-export async function createPayment() {
-  const API = process.env.NEXT_PUBLIC_API_URL;
+// lib/api.ts
 
-  const res = await fetch(`${API}/api/payments/create`, {
+const BACKEND_URL =
+  process.env.NEXT_PUBLIC_BACKEND_URL || "https://safepi-botj.onrender.com";
+
+export async function createPayment(body: any) {
+  const res = await fetch(`${BACKEND_URL}/api/create-payment`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({}), // no arguments needed
+    body: JSON.stringify(body),
+    cache: "no-store",
   });
 
   if (!res.ok) {
-    throw new Error("Failed to create payment");
+    throw new Error(`Backend error: ${res.status}`);
   }
 
-  return res.json(); // { paymentId, amount }
+  return res.json();
 }
 
-export async function completePayment(paymentId: string) {
-  const API = process.env.NEXT_PUBLIC_API_URL;
-
-  const res = await fetch(`${API}/api/payments/complete`, {
+export async function completePayment(body: any) {
+  const res = await fetch(`${BACKEND_URL}/api/complete-payment`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ paymentId }),
+    body: JSON.stringify(body),
+    cache: "no-store",
   });
 
   if (!res.ok) {
-    throw new Error("Failed to confirm payment");
+    throw new Error(`Backend error: ${res.status}`);
   }
 
   return res.json();
