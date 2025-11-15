@@ -9,14 +9,16 @@ export default function Page() {
 
   useEffect(() => {
     const loadPiSDK = () => {
+      if (typeof window === "undefined") return;
+
       const Pi = (window as any).Pi;
 
-      if (typeof window !== "undefined" && Pi) {
+      if (Pi) {
         console.log("Pi SDK detected");
 
         Pi.init({
           version: "2.0",
-          sandbox: false,
+          sandbox: false, // set true if you're using a sandbox app
         });
 
         Pi.authenticate(["payments"], (incomplete: any) => {
@@ -28,7 +30,7 @@ export default function Page() {
           })
           .catch((err: any) => console.error("Pi Auth Error:", err));
       } else {
-        console.log("Pi SDK NOT detected — open inside Pi Browser");
+        console.log("Pi SDK NOT detected — this is expected outside Pi Browser.");
       }
     };
 
@@ -36,18 +38,20 @@ export default function Page() {
   }, []);
 
   async function handlePayment() {
+    if (typeof window === "undefined") return;
+
     const Pi = (window as any).Pi;
 
     if (!piReady || !Pi) {
-      alert("Pi SDK not ready yet. Please open inside Pi Browser.");
+      alert("Pi SDK not ready yet. Please open this app inside Pi Browser.");
       return;
     }
 
     console.log("Starting Pi payment...");
 
     const paymentData = {
-      amount: 1,
-      memo: "SafePi Test Payment",
+      amount: 0.1, // 🔹 CHANGED: 0.1 Pi instead of 1
+      memo: "SafePi Test Payment (0.1 π)",
       metadata: { orderId: "SP-0001" },
     };
 
@@ -98,6 +102,7 @@ export default function Page() {
   return (
     <div style={{ padding: 20 }}>
       <h1>SafePi Payment</h1>
+      <p>Test payment amount: <strong>0.1 π</strong></p>
 
       <button
         onClick={handlePayment}
@@ -112,7 +117,7 @@ export default function Page() {
           marginTop: "20px",
         }}
       >
-        Pay 1 π
+        Pay 0.1 π
       </button>
     </div>
   );
