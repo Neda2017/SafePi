@@ -11,9 +11,7 @@ export async function createPayment(body: any) {
     cache: "no-store",
   });
 
-  if (!res.ok) {
-    throw new Error(`Backend error: ${res.status}`);
-  }
+  if (!res.ok) throw new Error(`Backend error: ${res.status}`);
 
   return res.json();
 }
@@ -26,9 +24,7 @@ export async function completePayment(body: any) {
     cache: "no-store",
   });
 
-  if (!res.ok) {
-    throw new Error(`Backend error: ${res.status}`);
-  }
+  if (!res.ok) throw new Error(`Backend error: ${res.status}`);
 
   return res.json();
 }
