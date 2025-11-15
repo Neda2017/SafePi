@@ -1,6 +1,6 @@
 "use client";
 
-import { createPayment } from "@/lib/api";
+import { createPayment } from "../lib/api";
 
 export default function Page() {
 
