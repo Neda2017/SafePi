@@ -101,6 +101,20 @@ Safeπ aims to reduce scam activity in the Pi community by helping Pioneers veri
 👤 Author
 
 Safeπ Development Team (2025)
+
+---
+
+## 📺 Safeπ Demo Videos
+
+### 🔹 Short Demonstration (YouTube Shorts)
+👉 [Watch Short Demo](https://www.youtube.com/shorts/6wYBQO_D1ok)
+
+### 🔹 Full App Walkthrough
+[![Watch the Demo](https://img.youtube.com/vi/InKNizH_2a8/0.jpg)](https://www.youtube.com/watch?v=InKNizH_2a8)
+
+---
+
+
 Repository maintained by the creator of Safeπ.
 
 🤝 Contributing
