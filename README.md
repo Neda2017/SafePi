@@ -64,42 +64,6 @@ CORS
 
 Hosted on Render
 
-📁 Project Structure
-/frontend
-  ├── app/
-  ├── components/
-  ├── page.tsx
-  └── ...
-
-/backend
-  ├── api/
-  │     ├── create-payment.js
-  │     └── complete-payment.js
-  ├── server.js
-  ├── package.json
-  └── .env
-
-🔐 Environment Variables (Backend)
-
-Create a .env file in /backend:
-
-PI_API_KEY=<your Pi server API key>
-PORT=10000
-
-
-⚠ Do NOT commit .env to GitHub.
-
-🛠️ Installation
-Frontend
-cd frontend
-npm install
-npm run dev
-
-Backend
-cd backend
-npm install
-npm start
-
 💳 Pi Payment Flow
 
 Safeπ uses the official Pi Payment API:
