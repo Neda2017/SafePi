@@ -8,13 +8,6 @@
   Protecting Pioneers from scams, fake Pi apps, and malicious links.
 </p>
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Status-Active-brightgreen?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Framework-Next.js-blue?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Backend-Express.js-purple?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Pi%20SDK-v2-orange?style=for-the-badge" />
-</p>
-
 ---
 
 ## 📌 Overview
@@ -44,18 +37,6 @@ Safeπ is fully integrated with the **Pi Platform SDK v2** and has a working, ve
 ### 🔹 Full App Walkthrough
 
 [![Watch the Demo](https://img.youtube.com/vi/InKNizH_2a8/0.jpg)](https://www.youtube.com/watch?v=InKNizH_2a8)
-
----
-
-## 🖼️ Screenshots / App Preview
-
-> Full UI demo of Safeπ scanning URLs and providing security results.
-
-### GIF Preview  
-*(Click the image to view in full size)*
-
-![Safeπ Preview](./assets/safepi_app_preview.gif)
-
 ---
 
 ## 🚀 Features
