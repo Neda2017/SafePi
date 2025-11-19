@@ -1,6 +1,24 @@
+"use server";
+
 import { NextRequest, NextResponse } from "next/server";
-import { generateText } from "ai";
+import { generateObject } from "ai";
 import { aiModel } from "@/lib/ai";
+import { z } from "zod";
+
+const schema = z.object({
+  suspicious: z.boolean(),
+  threatLevel: z.enum(["low", "medium", "high"]),
+  reason: z.string(),
+  category: z.enum([
+    "phishing",
+    "fake-airdrop",
+    "wallet-drain",
+    "impersonation",
+    "malware",
+    "other",
+  ]),
+  confidence: z.number(),
+});
 
 export async function POST(req: NextRequest) {
   try {
@@ -14,43 +32,20 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { text } = await generateText({
+    const { object } = await generateObject({
       model: aiModel,
-      prompt: `
-You are a security assistant specialized in detecting phishing and scam links.
-
-Analyze this URL and answer ONLY in strict JSON:
-
-{
-  "suspicious": boolean,
-  "threatLevel": "low" | "medium" | "high",
-  "reason": string,
-  "category": "phishing" | "fake-airdrop" | "wallet-drain" | "impersonation" | "malware" | "other",
-  "confidence": number
-}
-
-URL: ${url}
-      `,
+      schema,
+      prompt: `Analyze this URL for scam or phishing indicators: ${url}`,
       temperature: 0.2,
     });
 
-    let parsed;
-    try {
-      parsed = JSON.parse(text);
-    } catch (err) {
-      return NextResponse.json(
-        { error: "AI returned invalid JSON", raw: text },
-        { status: 500 }
-      );
-    }
-
     return NextResponse.json({
       url,
-      ...parsed,
+      ...object,
     });
-  } catch (error) {
+  } catch (error: any) {
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: error?.message || "Internal server error" },
       { status: 500 }
     );
   }
