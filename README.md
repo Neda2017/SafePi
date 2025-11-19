@@ -60,13 +60,13 @@ Copy code
 
 Returns:
 ```json
-{
+
   "suspicious": true,
   "threatLevel": "medium",
   "reason": "...",
   "category": "phishing",
   "confidence": 0.78
-}
+
 🔍 Local Scam Database
 Located at: frontend/lib/scamDatabase.ts
 
