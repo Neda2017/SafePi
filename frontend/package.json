@@ -10,6 +10,7 @@
   "dependencies": {
     "@ai-sdk/openai": "^2.0.68",
     "@ai-sdk/ui-utils": "^1.2.11",
+    "@supabase/supabase-js": "^2.83.0",
     "ai": "^5.0.95",
     "next": "^14.2.33",
     "react": "18.3.1",
