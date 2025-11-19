@@ -1,25 +1,8 @@
 "use server";
 
 import { NextRequest, NextResponse } from "next/server";
-import { generateObject } from "ai";
+import { generateText } from "ai";
 import { aiModel } from "@/lib/ai";
-import { z } from "zod";
-
-// Define output schema
-const schema = z.object({
-  suspicious: z.boolean(),
-  threatLevel: z.enum(["low", "medium", "high"]),
-  reason: z.string(),
-  category: z.enum([
-    "phishing",
-    "fake-airdrop",
-    "wallet-drain",
-    "impersonation",
-    "malware",
-    "other",
-  ]),
-  confidence: z.number(),
-});
 
 export async function POST(req: NextRequest) {
   try {
@@ -33,22 +16,38 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Force strict JSON output with schema enforcement
-    const { object } = await generateObject({
+    // Force STRICT JSON (no markdown, no text)
+    const { text } = await generateText({
       model: aiModel,
-      schema,
-      prompt: `Analyze this URL for scam or phishing indicators: ${url}`,
+      prompt: `Analyze the following URL and return ONLY valid JSON. No backticks. No markdown. No explanation.
+
+URL: ${url}
+
+Return a JSON object with:
+{
+  "suspicious": boolean,
+  "threatLevel": "low" | "medium" | "high",
+  "reason": string,
+  "category": "phishing" | "fake-airdrop" | "wallet-drain" | "impersonation" | "malware" | "other",
+  "confidence": number
+}
+`,
       temperature: 0.2,
-      response_format: { type: "json_schema" },
+      response_format: {
+        type: "json_object",
+      },
     });
+
+    // Parse strict JSON
+    const parsed = JSON.parse(text);
 
     return NextResponse.json({
       url,
-      ...object,
+      ...parsed,
     });
   } catch (error: any) {
     return NextResponse.json(
-      { error: error?.message || "Internal server error" },
+      { error: error.message || "Internal server error" },
       { status: 500 }
     );
   }
