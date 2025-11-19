@@ -17,14 +17,17 @@ Its purpose is simple:
 
 > **Help Pioneers verify whether a website is safe, suspicious, or potentially harmful.**
 
-Safeπ scans URLs using risk signals such as:
+Safeπ now includes a **powerful AI-based phishing analyzer**, built using OpenAI’s latest models.  
+It scans URLs using signals such as:
+
 - phishing patterns  
 - suspicious or fake Pi domains  
-- SSL certificate issues  
-- redirections  
+- malicious redirects  
 - scam-like behavior  
+- SSL issues  
+- prior known malicious links (via internal database)
 
-Safeπ is fully integrated with the **Pi Platform SDK v2** and has a working, verified **Pi Payment Flow**.
+Safeπ is also prepared for **Pi SDK v2 integration** (domain validation pending).
 
 ---
 
@@ -37,133 +40,148 @@ Safeπ is fully integrated with the **Pi Platform SDK v2** and has a working, ve
 ### 🔹 Full App Walkthrough
 
 [![Watch the Demo](https://img.youtube.com/vi/InKNizH_2a8/0.jpg)](https://www.youtube.com/watch?v=InKNizH_2a8)
+
 ---
 
 ## 🚀 Features
 
-### 🔍 URL Safety Scanner
-- Detects phishing attempts  
-- Identifies fake Pi websites  
-- Flags dangerous redirects  
-- Checks SSL validity  
-- Fast scan & instant results  
+### 🔍 AI-Powered URL Safety Scanner (New)
+- OpenAI Model: **gpt-4.1-mini**
+- Detects phishing and fake Pi websites  
+- Classifies scam type (wallet drain, fake airdrop, malware, etc.)
+- Confidence scoring  
+- JSON-based risk assessment  
+- Lightning-fast scanning
 
-### 🔐 Pi SDK Integration
-- Fully functional Pi Payment Flow  
-- `onReadyForServerApproval`  
-- `onReadyForServerCompletion`  
-- Secure server-side approval via Pi API  
+API Route:
+POST /api/analyze-link
 
-### ⚡ Modern Architecture
-- Next.js 14 (Frontend)  
-- Express.js (Backend)  
-- Render.com hosting  
-- Clean project structure  
+arduino
+Copy code
 
----
+Returns:
+```json
+{
+  "suspicious": true,
+  "threatLevel": "medium",
+  "reason": "...",
+  "category": "phishing",
+  "confidence": 0.78
+}
+🔍 Local Scam Database
+Located at: frontend/lib/scamDatabase.ts
 
-## 📁 Project Structure
+Contains hundreds of verified scam URLs
+
+Search UI included
+
+Manual “Add New Scam Link” UI included
+
+🔐 Pi SDK Integration (Pending Approval)
+The app is fully ready for:
+
+Pi authentication
+
+Pi payment flow
+
+Events: onReadyForServerApproval, onReadyForServerCompletion
+
+⚠️ Pi Developer Portal approval + domain validation are pending for the new Vercel URL.
+Once approved, Pi SDK will function inside Pi Browser.
+
+⚡ Modern Architecture
+Next.js 14 (App Router)
+
+Vercel frontend deployment
+
+Render deployment (mirror)
+
+OpenAI direct SDK integration
+
+Fully client-friendly structure (no Express backend needed)
+
+📁 Project Structure
+pgsql
+Copy code
 SafePi_cleanstack/
 ├── frontend/
-│ └── app/
-│ └── page.tsx
-│ └── components/
-│ └── public/
-│
-├── backend/
-│ ├── api/
-│ │ ├── create-payment.js
-│ │ └── complete-payment.js
-│ ├── server.js
-│ ├── package.json
-│ └── .env (not included)
+│   ├── app/
+│   │   ├── page.tsx
+│   │   ├── api/
+│   │   │   └── analyze-link/route.ts   ← AI Scanner API
+│   ├── lib/
+│   │   ├── openai.ts                   ← OpenAI client
+│   │   └── scamDatabase.ts             ← Local scam DB
+│   ├── public/
 │
 └── assets/
-├── safepi-logo.png
-└── safepi_app_preview.gif
+    ├── safepi-logo.png
+    └── safepi_app_preview.gif
+🔐 Environment Variables
+Create Vercel & Render environment variable:
 
+ini
+Copy code
+OPENAI_API_KEY=<your OpenAI key>
+⚠️ No Supabase keys needed anymore.
+The project now uses a local TypeScript scam database instead of the old App Studio backend.
 
----
-
-## 🔐 Environment Variables
-
-Create `/backend/.env`:
-
-
-
-PI_API_KEY=<your Pi server API key>
-PORT=10000
-
-
-> 🚫 Do NOT commit `.env` to GitHub.
-
----
-
-## 🛠️ Installation
-
-### ⬛ Backend Setup
-```bash
-cd backend
-npm install
-npm start
-
+🛠️ Installation
 🟦 Frontend Setup
+bash
+Copy code
 cd frontend
 npm install
 npm run dev
+⚙️ AI Scanner Test (optional)
+bash
+Copy code
+POST /api/analyze-link
+{
+  "url": "https://example.com"
+}
+💳 Pi Payment Flow (Prepared)
+Safeπ is ready for server-side Pi payments via:
 
-💳 Pi Payment Flow (Verified & Working)
-
-Safeπ uses Pi Network’s secure payment API:
-
-✔ Approval Flow
-
+bash
+Copy code
 POST https://api.minepi.com/v2/payments/{paymentId}/approve
-
-✔ Completion Flow
-
 POST https://api.minepi.com/v2/payments/{paymentId}/complete
+Status:
 
-Verified by logs:
+✔ SDK included
 
-developer_approved: true
+✔ UI prepared
 
-developer_completed: true
-
-transaction_verified: true
+⏳ Waiting for Pi Developer Portal to approve & validate domain
 
 📦 Deployment
+🟩 Vercel (Primary)
+https://safepi.vercel.app
 
-Safeπ is deployed using:
+🟧 Render (Secondary)
+Used for testing API behavior.
 
-Render (backend)
-
-Render / Vercel (frontend)
-
-HTTPS fully enabled
-
-Domain validated in Pi Developer Portal
+🔐 Pi Domain Validation
+Pending approval.
+Once validated, Pi Browser compatibility becomes fully active.
 
 🧭 Roadmap
+AI result → “Add to database” (automatic)
 
- Payment Flow (Testnet)
+Payment Flow (Testnet)
 
- URL scanning engine
+Pi Browser compatibility (post-approval)
 
- Pi Browser compatibility
+Threat database expansion
 
- Add threat database (v1)
+Community reporting v2
 
- Auto-detection of link reputation
+Chrome/Firefox extension
 
- User history of scans
-
- Browser extension (Chrome/Firefox)
-
- Community-driven reporting
+Full scam-pattern analytics
 
 🤝 Contributing
-
 We welcome:
 
 Feature requests
@@ -174,19 +192,16 @@ UI improvements
 
 Pull requests
 
-Submit via Issues or Pull Requests tab.
+Submit via GitHub Issues or Pull Requests.
 
 🪪 License
-
 MIT License
 Free to use, modify, and distribute with attribution.
 
 👤 Maintainer
-
 Safeπ Development Team – 2025
 
 🎉 Thank you for supporting Safeπ!
-
-Safeπ’s mission is to protect Pioneers and strengthen trust across the Pi ecosystem by preventing scams and making online interactions safer.
+Our mission is to protect Pioneers and strengthen trust across the Pi ecosystem.
 
 
