@@ -1,6 +1,4 @@
-export const aiModel = {
-  provider: "openai",
-  model: "gpt-4.1-mini",
-  apiKey: process.env.OPENAI_API_KEY!,
-};
+// Using the legacy Vercel AI SDK model string only
+export const aiModel = "gpt-4.1-mini";
+
 

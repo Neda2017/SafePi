@@ -14,9 +14,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Ask the model to return JSON only
     const { text } = await generateText({
-      model: aiModel,
+      model: aiModel, // <-- now just a string
       prompt: `
 Return ONLY valid JSON.
 No markdown. No backticks. No explanation.
@@ -36,7 +35,6 @@ Return a JSON object with exactly these fields:
       temperature: 0.2,
     });
 
-    // Clean accidental markdown code fences just in case
     const cleaned = text
       .replace(/```json/gi, "")
       .replace(/```/g, "")
@@ -44,10 +42,8 @@ Return a JSON object with exactly these fields:
 
     const parsed = JSON.parse(cleaned);
 
-    return NextResponse.json({
-      url,
-      ...parsed,
-    });
+    return NextResponse.json({ url, ...parsed });
+
   } catch (error: any) {
     return NextResponse.json(
       { error: error?.message || "Internal server error" },
@@ -55,3 +51,4 @@ Return a JSON object with exactly these fields:
     );
   }
 }
+
