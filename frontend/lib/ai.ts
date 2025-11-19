@@ -1,5 +1,5 @@
-import { createOpenAI } from "ai";
+import { OpenAI } from "ai";
 
-export const aiModel = createOpenAI({
+export const aiModel = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY!,
-}).languageModel("gpt-4.1-mini");
+}).chat.completions;
