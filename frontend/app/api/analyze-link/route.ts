@@ -1,22 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { generateObject } from "ai";
+import { generateText } from "ai";
 import { aiModel } from "@/lib/ai";
-import { z } from "zod";
-
-const schema = z.object({
-  suspicious: z.boolean(),
-  threatLevel: z.enum(["low", "medium", "high"]),
-  reason: z.string(),
-  category: z.enum([
-    "phishing",
-    "fake-airdrop",
-    "wallet-drain",
-    "impersonation",
-    "malware",
-    "other",
-  ]),
-  confidence: z.number(),
-});
 
 export async function POST(req: NextRequest) {
   try {
@@ -30,19 +14,43 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // AI call happens inside POST, not top-level → OK
-    const { object } = await generateObject({
+    // Ask the model to return JSON only
+    const { text } = await generateText({
       model: aiModel,
-      schema,
-      prompt: `Analyze this URL for scam or phishing indicators: ${url}`,
+      prompt: `
+Return ONLY valid JSON.
+No markdown. No backticks. No explanation.
+
+Analyze this URL: ${url}
+
+Return a JSON object with exactly these fields:
+
+{
+  "suspicious": boolean,
+  "threatLevel": "low" | "medium" | "high",
+  "reason": string,
+  "category": "phishing" | "fake-airdrop" | "wallet-drain" | "impersonation" | "malware" | "other",
+  "confidence": number
+}
+`,
       temperature: 0.2,
     });
 
-    return NextResponse.json({ url, ...object });
+    // Clean accidental markdown code fences just in case
+    const cleaned = text
+      .replace(/```json/gi, "")
+      .replace(/```/g, "")
+      .trim();
 
-  } catch (err: any) {
+    const parsed = JSON.parse(cleaned);
+
+    return NextResponse.json({
+      url,
+      ...parsed,
+    });
+  } catch (error: any) {
     return NextResponse.json(
-      { error: err?.message || "Internal server error" },
+      { error: error?.message || "Internal server error" },
       { status: 500 }
     );
   }
