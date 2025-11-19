@@ -16,14 +16,16 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Force STRICT JSON (no markdown, no text)
+    // Ask for JSON only
     const { text } = await generateText({
       model: aiModel,
-      prompt: `Analyze the following URL and return ONLY valid JSON. No backticks. No markdown. No explanation.
+      prompt: `
+Return ONLY valid JSON. 
+No code blocks, no markdown, no explanation.
 
-URL: ${url}
+Analyze this URL: ${url}
 
-Return a JSON object with:
+Format:
 {
   "suspicious": boolean,
   "threatLevel": "low" | "medium" | "high",
@@ -33,13 +35,15 @@ Return a JSON object with:
 }
 `,
       temperature: 0.2,
-      response_format: {
-        type: "json_object",
-      },
     });
 
-    // Parse strict JSON
-    const parsed = JSON.parse(text);
+    // Clean accidental markdown code fences
+    const cleaned = text
+      .replace(/```json/gi, "")
+      .replace(/```/g, "")
+      .trim();
+
+    const parsed = JSON.parse(cleaned);
 
     return NextResponse.json({
       url,
@@ -47,7 +51,9 @@ Return a JSON object with:
     });
   } catch (error: any) {
     return NextResponse.json(
-      { error: error.message || "Internal server error" },
+      {
+        error: error?.message || "Internal server error",
+      },
       { status: 500 }
     );
   }
