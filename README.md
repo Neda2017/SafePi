@@ -1,5 +1,4 @@
-<p align="center">
-  <img src="./assets/safepi-logo.png" width="140" />
+<img src="./assets/safepi-logo.png" width="140" />
 </p>
 
 <h1 align="center">Safeπ – Pi Network Link Safety Scanner</h1>
