@@ -1,5 +1,5 @@
-// lib/ai.ts
-import { openai } from "@ai-sdk/openai";
+import { createOpenAI } from "ai";
 
-export const aiModel = openai("gpt-4.1-mini");
-// or: openai("gpt-4o-mini") if you prefer
+export const aiModel = createOpenAI({
+  apiKey: process.env.OPENAI_API_KEY!,
+}).languageModel("gpt-4.1-mini");
