@@ -1,10 +1,6 @@
-import { twMerge } from "tailwind-merge";
+// frontend/lib/utils.ts
 
+// Minimal utility — no external dependencies
 export function cn(...inputs: any[]) {
-  return twMerge(
-    inputs
-      .flat(Infinity)
-      .filter(Boolean)
-      .join(" ")
-  );
+  return inputs.filter(Boolean).join(" ");
 }
