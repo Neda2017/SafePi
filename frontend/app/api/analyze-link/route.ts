@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { generateText } from "ai";
-import { aiModel } from "@/lib/ai";
+import { openai } from "@/lib/openai";
 
 export async function POST(req: NextRequest) {
   try {
@@ -14,15 +13,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { text } = await generateText({
-      model: aiModel, // <-- now just a string
-      prompt: `
-Return ONLY valid JSON.
-No markdown. No backticks. No explanation.
+    const systemPrompt = `
+You are a security assistant specialized in detecting phishing and scam links.
 
-Analyze this URL: ${url}
-
-Return a JSON object with exactly these fields:
+Analyze the given URL and respond ONLY with valid JSON (no markdown, no backticks, no explanation) using this exact structure:
 
 {
   "suspicious": boolean,
@@ -31,19 +25,31 @@ Return a JSON object with exactly these fields:
   "category": "phishing" | "fake-airdrop" | "wallet-drain" | "impersonation" | "malware" | "other",
   "confidence": number
 }
-`,
+`;
+
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4.1-mini",
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: `URL to analyze: ${url}` },
+      ],
       temperature: 0.2,
     });
 
-    const cleaned = text
+    const raw =
+      completion.choices[0].message.content?.toString() ?? "";
+
+    const cleaned = raw
       .replace(/```json/gi, "")
       .replace(/```/g, "")
       .trim();
 
     const parsed = JSON.parse(cleaned);
 
-    return NextResponse.json({ url, ...parsed });
-
+    return NextResponse.json({
+      url,
+      ...parsed,
+    });
   } catch (error: any) {
     return NextResponse.json(
       { error: error?.message || "Internal server error" },
@@ -51,4 +57,3 @@ Return a JSON object with exactly these fields:
     );
   }
 }
-
