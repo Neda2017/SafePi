@@ -5,7 +5,7 @@ import { generateObject } from "ai";
 import { aiModel } from "@/lib/ai";
 import { z } from "zod";
 
-// JSON schema the AI must follow
+// Define output schema
 const schema = z.object({
   suspicious: z.boolean(),
   threatLevel: z.enum(["low", "medium", "high"]),
@@ -33,13 +33,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Strict JSON output (no markdown, no wrappers)
+    // Force strict JSON output with schema enforcement
     const { object } = await generateObject({
       model: aiModel,
       schema,
       prompt: `Analyze this URL for scam or phishing indicators: ${url}`,
       temperature: 0.2,
-      response_format: { type: "json_schema" }, // ⭐ THE CRITICAL LINE
+      response_format: { type: "json_schema" },
     });
 
     return NextResponse.json({
@@ -48,4 +48,8 @@ export async function POST(req: NextRequest) {
     });
   } catch (error: any) {
     return NextResponse.json(
-      { err
+      { error: error?.message || "Internal server error" },
+      { status: 500 }
+    );
+  }
+}
