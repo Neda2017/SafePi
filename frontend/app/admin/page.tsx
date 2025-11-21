@@ -107,3 +107,37 @@ export default function AdminDashboard() {
         >
           Add URL
         </button>
+      </div>
+
+      <h2 className="text-xl mb-3">Existing Suspicious Links</h2>
+
+      {links.length === 0 ? (
+        <p>No suspicious links yet.</p>
+      ) : (
+        <ul className="space-y-3">
+          {links.map((link) => (
+            <li
+              key={link.id}
+              className="p-3 border rounded-lg flex justify-between"
+            >
+              <div>
+                <p className="font-medium break-all">{link.url}</p>
+                <p className="text-sm text-gray-500">
+                  {link.type}
+                  {link.addedBy ? ` • added by ${link.addedBy}` : ""}
+                </p>
+              </div>
+
+              <button
+                onClick={() => deleteLink(link.id)}
+                className="text-red-500"
+              >
+                Delete
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
