@@ -46,10 +46,12 @@ export default function AdminDashboard() {
   const addLink = async () => {
     if (!newUrl.trim()) return;
 
+    const timestamp = Date.now();
+
     const docRef = await addDoc(collection(db, "suspicious_links"), {
       url: newUrl,
       type: newType,
-      timestamp: Date.now(),
+      timestamp,
       addedBy: "Bill",
     });
 
@@ -58,7 +60,7 @@ export default function AdminDashboard() {
       url: newUrl,
       type: newType,
       addedBy: "Bill",
-      timestamp: Date.now(),
+      timestamp,
     };
 
     setLinks((prev) => [...prev, newLink]);
@@ -70,14 +72,16 @@ export default function AdminDashboard() {
     setLinks((prev) => prev.filter((link) => link.id !== id));
   };
 
-  if (loading) return <p>Loading admin dashboard...</p>;
+  if (loading) {
+    return <p>Loading admin dashboard...</p>;
+  }
 
   return (
     <div className="p-6 max-w-3xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">Safeπ Admin Dashboard</h1>
 
       <div className="mb-6 p-4 border rounded-lg">
-        <h2 className="text-xl mb-2">Add suspicious URL</h2>
+        <h2 className="text-xl mb-2">Add Suspicious URL</h2>
 
         <input
           type="text"
@@ -103,18 +107,3 @@ export default function AdminDashboard() {
         >
           Add URL
         </button>
-      </div>
-
-      <h2 className="text-xl mb-3">Existing Suspicious Links</h2>
-
-      {links.length === 0 ? (
-        <p>No suspicious links yet.</p>
-      ) : (
-        <ul className="space-y-3">
-          {links.map((link) => (
-            <li
-              key={link.id}
-              className="p-3 border rounded-lg flex justify-between"
-            >
-              <div>
-                <p className="font-medium break-all">{link.url}
