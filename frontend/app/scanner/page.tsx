@@ -76,7 +76,22 @@ export default function ScannerPage() {
 
           {result.details && (
             <div className="mt-3 text-sm text-gray-700">
-              <p><strong>Type:</strong> {result.details.type}</p>
-              <p><strong>Severity:</strong> {result.details.severity}</p>
-              <p><strong>Description:</strong> {result.details.description}</p>
-              <p><strong>Reports:</strong> {result.details.report
+              <p>
+                <strong>Type:</strong> {result.details.type}
+              </p>
+              <p>
+                <strong>Severity:</strong> {result.details.severity}
+              </p>
+              <p>
+                <strong>Description:</strong> {result.details.description}
+              </p>
+              <p>
+                <strong>Reports:</strong> {result.details.reports}
+              </p>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
