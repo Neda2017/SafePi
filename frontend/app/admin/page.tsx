@@ -24,6 +24,7 @@ export default function AdminDashboard() {
   const [newType, setNewType] = useState("suspicious");
   const [loading, setLoading] = useState(true);
 
+  // Fetch existing links from Firestore
   useEffect(() => {
     const fetchLinks = async () => {
       const querySnapshot = await getDocs(collection(db, "suspicious_links"));
@@ -43,30 +44,42 @@ export default function AdminDashboard() {
     fetchLinks();
   }, []);
 
+  // MULTI-LINK ADD FUNCTION
   const addLink = async () => {
     if (!newUrl.trim()) return;
 
-    const timestamp = Date.now();
+    // Split textarea input by newline → multiple URLs
+    const urls = newUrl
+      .split("\n")
+      .map((u) => u.trim())
+      .filter((u) => u.length > 0);
 
-    const docRef = await addDoc(collection(db, "suspicious_links"), {
-      url: newUrl,
-      type: newType,
-      timestamp,
-      addedBy: "Bill",
-    });
+    for (const url of urls) {
+      const timestamp = Date.now();
 
-    const newLink: SuspiciousLink = {
-      id: docRef.id,
-      url: newUrl,
-      type: newType,
-      addedBy: "Bill",
-      timestamp,
-    };
+      const docRef = await addDoc(collection(db, "suspicious_links"), {
+        url,
+        type: newType,
+        timestamp,
+        addedBy: "Bill",
+      });
 
-    setLinks((prev) => [...prev, newLink]);
+      const newLink: SuspiciousLink = {
+        id: docRef.id,
+        url,
+        type: newType,
+        addedBy: "Bill",
+        timestamp,
+      };
+
+      setLinks((prev) => [...prev, newLink]);
+    }
+
+    // Clear textarea
     setNewUrl("");
   };
 
+  // Delete a single link
   const deleteLink = async (id: string) => {
     await deleteDoc(doc(db, "suspicious_links", id));
     setLinks((prev) => prev.filter((link) => link.id !== id));
@@ -80,16 +93,16 @@ export default function AdminDashboard() {
     <div className="p-6 max-w-3xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">Safeπ Admin Dashboard</h1>
 
+      {/* ADD NEW LINKS */}
       <div className="mb-6 p-4 border rounded-lg">
-        <h2 className="text-xl mb-2">Add Suspicious URL</h2>
+        <h2 className="text-xl mb-2">Add Suspicious URLs</h2>
 
-        <input
-          type="text"
-          className="border p-2 w-full mb-2"
-          placeholder="https://example.com"
+        <textarea
+          className="border p-2 w-full mb-2 h-32"
+          placeholder="Enter one URL per line"
           value={newUrl}
           onChange={(e) => setNewUrl(e.target.value)}
-        />
+        ></textarea>
 
         <select
           className="border p-2 w-full mb-2"
@@ -105,10 +118,11 @@ export default function AdminDashboard() {
           onClick={addLink}
           className="bg-blue-600 text-white px-4 py-2 rounded-lg"
         >
-          Add URL
+          Add URLs
         </button>
       </div>
 
+      {/* EXISTING LINKS */}
       <h2 className="text-xl mb-3">Existing Suspicious Links</h2>
 
       {links.length === 0 ? (
