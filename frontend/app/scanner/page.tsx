@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { scamDatabase } from "@/utils/scam-database";
 import { fetchSuspiciousLinks } from "@/utils/fetchSuspiciousLinks";
 
