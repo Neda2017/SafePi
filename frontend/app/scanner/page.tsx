@@ -1,6 +1,7 @@
 "use client";
 
-import { scamDatabase } from "@/utils/scam-database";
+import { useState } from "react";
+import { scamDatabase } from "@/lib/scam-database";
 import { fetchSuspiciousLinks } from "@/utils/fetchSuspiciousLinks";
 
 export default function ScannerPage() {
@@ -8,20 +9,19 @@ export default function ScannerPage() {
   const [result, setResult] = useState<any>(null);
   const [loading, setLoading] = useState(false);
 
-  // Main scan function
   const scanUrl = async () => {
     if (!url.trim()) return;
 
     setLoading(true);
     setResult(null);
 
-    // 1️⃣ Load dynamic links from Firestore
+    // 1️⃣ Load Firestore suspicious links
     const firestoreLinks = await fetchSuspiciousLinks();
 
-    // 2️⃣ Merge dynamic + static database
+    // 2️⃣ Merge static + dynamic databases
     const combined = [...scamDatabase, ...firestoreLinks];
 
-    // 3️⃣ Check against the merged database
+    // 3️⃣ Match against all known threats
     const lowercaseInput = url.toLowerCase();
     const match = combined.find((entry) =>
       lowercaseInput.includes(entry.url.toLowerCase())
@@ -79,11 +79,4 @@ export default function ScannerPage() {
               <p><strong>Type:</strong> {result.details.type}</p>
               <p><strong>Severity:</strong> {result.details.severity}</p>
               <p><strong>Description:</strong> {result.details.description}</p>
-              <p><strong>Reports:</strong> {result.details.reports}</p>
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  );
-}
+              <p><strong>Reports:</strong> {result.details.report
