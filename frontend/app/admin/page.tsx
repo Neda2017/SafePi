@@ -1,10 +1,25 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import { db } from "@/utils/firebase";
-import { collection, addDoc, getDocs, deleteDoc, doc } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
+
+type SuspiciousLink = {
+  id: string;
+  url: string;
+  type: string;
+  addedBy?: string;
+  timestamp?: number;
+};
 
 export default function AdminDashboard() {
-  const [links, setLinks] = useState([]);
+  const [links, setLinks] = useState<SuspiciousLink[]>([]);
   const [newUrl, setNewUrl] = useState("");
   const [newType, setNewType] = useState("suspicious");
   const [loading, setLoading] = useState(true);
@@ -12,10 +27,15 @@ export default function AdminDashboard() {
   useEffect(() => {
     const fetchLinks = async () => {
       const querySnapshot = await getDocs(collection(db, "suspicious_links"));
-      const data = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
+
+      const data: SuspiciousLink[] = querySnapshot.docs.map((d) => {
+        const docData = d.data() as Omit<SuspiciousLink, "id">;
+        return {
+          id: d.id,
+          ...docData,
+        };
+      });
+
       setLinks(data);
       setLoading(false);
     };
@@ -30,16 +50,24 @@ export default function AdminDashboard() {
       url: newUrl,
       type: newType,
       timestamp: Date.now(),
-      addedBy: "Bill"
+      addedBy: "Bill",
     });
 
-    setLinks([...links, { id: docRef.id, url: newUrl, type: newType }]);
+    const newLink: SuspiciousLink = {
+      id: docRef.id,
+      url: newUrl,
+      type: newType,
+      addedBy: "Bill",
+      timestamp: Date.now(),
+    };
+
+    setLinks((prev) => [...prev, newLink]);
     setNewUrl("");
   };
 
-  const deleteLink = async (id) => {
+  const deleteLink = async (id: string) => {
     await deleteDoc(doc(db, "suspicious_links", id));
-    setLinks(links.filter(link => link.id !== id));
+    setLinks((prev) => prev.filter((link) => link.id !== id));
   };
 
   if (loading) return <p>Loading admin dashboard...</p>;
@@ -83,26 +111,10 @@ export default function AdminDashboard() {
         <p>No suspicious links yet.</p>
       ) : (
         <ul className="space-y-3">
-          {links.map(link => (
+          {links.map((link) => (
             <li
               key={link.id}
               className="p-3 border rounded-lg flex justify-between"
             >
               <div>
-                <p className="font-medium">{link.url}</p>
-                <p className="text-sm text-gray-500">{link.type}</p>
-              </div>
-
-              <button
-                onClick={() => deleteLink(link.id)}
-                className="text-red-500"
-              >
-                Delete
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
-}
+                <p className="font-medium break-all">{link.url}
