@@ -2,12 +2,6 @@
 
 import { useEffect, useState } from "react";
 
-declare global {
-  interface Window {
-    Pi: any;
-  }
-}
-
 export default function Page() {
   const [piReady, setPiReady] = useState(false);
   const [username, setUsername] = useState("");
@@ -21,7 +15,7 @@ export default function Page() {
     try {
       if (typeof window === "undefined") return;
 
-      const Pi = window.Pi;
+      const Pi = (window as any)?.Pi;
 
       if (!Pi) {
         console.log(
@@ -87,7 +81,7 @@ export default function Page() {
     try {
       if (typeof window === "undefined") return;
 
-      const Pi = window.Pi;
+      const Pi = (window as any)?.Pi;
 
       if (!Pi || !piReady) {
         alert(
