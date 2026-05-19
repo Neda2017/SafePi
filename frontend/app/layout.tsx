@@ -1,10 +1,11 @@
 // app/layout.tsx
 import "./globals.css";
 import { ReactNode } from "react";
+import Script from "next/script";
 
 export const metadata = {
   title: "SafePi",
-  description: "Pi Network Payments",
+  description: "Pi Network safety scanner and payments",
 };
 
 export default function RootLayout({
@@ -14,18 +15,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head>
-        {/* Load Pi SDK */}
-        <script src="https://sdk.minepi.com/pi-sdk.js"></script>
-      </head>
-
-      <body
-        style={{
-          margin: 0,
-          padding: 0,
-          fontFamily: "Arial, sans-serif",
-        }}
-      >
+      <body>
+        <Script src="https://sdk.minepi.com/pi-sdk.js" strategy="beforeInteractive" />
         {children}
       </body>
     </html>
