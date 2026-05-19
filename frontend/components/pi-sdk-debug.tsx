@@ -11,6 +11,9 @@ export function PiSDKDebugPanel() {
   const [sdkStatus, setSdkStatus] = useState<string>("checking")
   const [piWindow, setPiWindow] = useState<boolean>(false)
   const [logs, setLogs] = useState<string[]>([])
+  const debugEnabled =
+    typeof window !== "undefined" &&
+    (window.location.hostname === "localhost" || new URLSearchParams(window.location.search).get("debugPi") === "true")
 
   useEffect(() => {
     const checkSDK = () => {
@@ -30,6 +33,10 @@ export function PiSDKDebugPanel() {
     const interval = setInterval(checkSDK, 3000)
     return () => clearInterval(interval)
   }, [])
+
+  if (!debugEnabled) {
+    return null
+  }
 
   if (!isOpen) {
     return (

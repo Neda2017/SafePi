@@ -87,6 +87,7 @@ function HomePageContent() {
   const { language, setLanguage } = useLanguage()
   const t = translations[language]
   const tFallback = t as typeof t & Record<string, string | undefined>
+  const copy = (key: string, fallback: string) => tFallback[key] || fallback
   const [currentTrustScore, setCurrentTrustScore] = useState<number | null>(null)
   const [enhancedTrustDetails, setEnhancedTrustDetails] = useState<TrustScoreDetails | null>(null)
   const [scanCache, setScanCache] = useState<Map<string, any>>(new Map())
@@ -493,7 +494,7 @@ function HomePageContent() {
               <div>
                 <h1 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight">Safeπ</h1>
                 <p className="text-xs text-muted-foreground">
-                  {tFallback.tagline || "Pi Network scam detection and link safety."}
+                  {copy("tagline", "Pi Network scam detection and link safety.")}
                 </p>
               </div>
             </div>
@@ -523,7 +524,7 @@ function HomePageContent() {
                 }`}
               >
                 <BarChart3 className="w-4 h-4" />
-                <span className="hidden sm:inline">{t.stats}</span>
+                <span className="hidden sm:inline">{copy("stats", "Stats")}</span>
               </button>
             </div>
           </header>
@@ -533,10 +534,10 @@ function HomePageContent() {
             <div className="mb-6 flex items-center justify-between p-4 bg-secondary/50 border border-border rounded-lg">
               <div className="flex-1">
                 <p className="text-sm font-medium text-foreground">
-                  {tFallback.freeScans || "Free scans"}: {freeScansRemaining}/{PAYMENT_CONFIG.FREE_SCANS_PER_DAY}
+                  {copy("freeScans", "Free scans")}: {freeScansRemaining}/{PAYMENT_CONFIG.FREE_SCANS_PER_DAY}
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">
-                  {tFallback.upgradeForUnlimited || "Upgrade for unlimited daily scans."}
+                  {copy("upgradeForUnlimited", "Upgrade for unlimited daily scans.")}
                 </p>
               </div>
               <Button onClick={() => setShowPaymentModal(true)} size="sm" className="ml-4">
@@ -606,8 +607,8 @@ function HomePageContent() {
           <section className="mb-12">
             <Card className="p-6 md:p-8 bg-card/50 backdrop-blur-sm border-2 border-border shadow-xl">
               <div className="mb-6">
-                <h2 className="text-2xl font-bold text-foreground mb-2">{t.scanUrl}</h2>
-                <p className="text-muted-foreground">{t.enterUrl}</p>
+                <h2 className="text-2xl font-bold text-foreground mb-2">{copy("scanUrl", "Scan a URL")}</h2>
+                <p className="text-muted-foreground">{copy("enterUrl", "Enter website URL...")}</p>
               </div>
 
               {!dailyPass?.active && (
@@ -661,12 +662,12 @@ function HomePageContent() {
                     {isScanning ? (
                       <>
                         <div className="w-4 h-4 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin mr-2" />
-                        {t.scanning}
+                        {copy("scanning", "Scanning")}
                       </>
                     ) : (
                       <>
                         <Search className="w-4 h-4 mr-2" />
-                        {t.scanNow}
+                        {copy("scanNow", "Scan Now")}
                       </>
                     )}
                   </Button>
@@ -746,25 +747,25 @@ function HomePageContent() {
                   <span className="font-bold text-lg text-foreground">Safeπ</span>
                 </div>
                 <p className="text-sm text-muted-foreground mb-4">
-                  {tFallback.tagline || "Pi Network scam detection and link safety."}
+                  {copy("tagline", "Pi Network scam detection and link safety.")}
                 </p>
                 <div className="flex flex-wrap gap-4 text-xs text-muted-foreground">
                   <span>v{APP_VERSION}</span>
                   <span>•</span>
                   <span>
-                    {DB_SIZE.toLocaleString()} {t.threats}
+                    {DB_SIZE.toLocaleString()} {copy("threats", "threats")}
                   </span>
                 </div>
               </div>
 
               <div>
-                <h3 className="font-semibold text-foreground mb-4">{t.quickLinks}</h3>
+                <h3 className="font-semibold text-foreground mb-4">{copy("quickLinks", "Quick Links")}</h3>
                 <div className="flex flex-col gap-2 text-sm">
                   <Link href="/dashboard" className="text-muted-foreground hover:text-primary transition-colors">
-                    {t.dashboard}
+                    {copy("dashboard", "Dashboard")}
                   </Link>
                   <Link href="/education" className="text-muted-foreground hover:text-primary transition-colors">
-                    {t.education}
+                    {copy("education", "Education")}
                   </Link>
                   <Link href="/help" className="text-muted-foreground hover:text-primary transition-colors">
                     Help & FAQ
@@ -782,20 +783,20 @@ function HomePageContent() {
               </div>
 
               <div>
-                <h3 className="font-semibold text-foreground mb-4">{t.legal}</h3>
+                <h3 className="font-semibold text-foreground mb-4">{copy("legal", "Legal")}</h3>
                 <div className="flex flex-col gap-2 text-sm">
                   <Link href="/privacy" className="text-muted-foreground hover:text-primary transition-colors">
-                    {t.privacy}
+                    {copy("privacy", "Privacy")}
                   </Link>
                   <Link href="/terms" className="text-muted-foreground hover:text-primary transition-colors">
-                    {t.terms}
+                    {copy("terms", "Terms")}
                   </Link>
                 </div>
               </div>
             </div>
 
             <div className="pt-8 border-t border-border text-center text-sm text-muted-foreground">
-              <p>{t.footerText}</p>
+              <p>{copy("footerText", "Community-powered real-time detection. © 2025 bill81. All rights reserved.")}</p>
             </div>
           </footer>
         </div>
