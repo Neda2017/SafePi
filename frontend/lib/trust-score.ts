@@ -54,13 +54,39 @@ const suspiciousKeywords = [
   "earn",
   "prize",
   "winner",
+  "drop",
+  "key",
+  "passphrase",
+  "seed",
+  "mnemonic",
+  "recovery",
+]
+
+// Patterns that are ALWAYS critical regardless of other factors
+const alwaysDangerousPatterns = [
+  "2fapinetkey",
+  "2fapinet",
+  "pinetkey",
+  "pinetdrop",
+  "pidrop",
+  "piclaimairdrop",
+  "sellpinetwork",
+  "pinetwork-kyc",
+  "pinetwork-migration",
+  "pinetwork-dex",
+  "pinetwork-gift",
+  "pinetwork-support",
+  "pinetwork-verify",
+  "pinetwork-help",
+  "fakepidex",
+  "pinetworkkyc",
+  "chuyendoinetpi",
+  "piwalletdrop",
 ]
 
 const officialDomains = ["minepi.com", "pi.network", "wallet.pi.net"]
 
 export function calculateTrustScore(url: string): TrustScoreResult {
-  console.log("[v0] Checking URL:", url)
-
   let score = 50
   const factors: TrustScoreResult["factors"] = []
   const detectedPatterns: string[] = []
@@ -71,9 +97,6 @@ export function calculateTrustScore(url: string): TrustScoreResult {
     .replace(/^https?:\/\//, "")
     .replace(/\/$/, "")
     .replace(/^www\./, "")
-
-  console.log("[v0] Normalized URL:", normalizedUrl)
-  console.log("[v0] Database size:", scamDatabase.length)
 
   const isOfficial = safeSites.some(
     (site) => normalizedUrl.includes(site.url.toLowerCase()) || site.url.toLowerCase().includes(normalizedUrl),
@@ -89,6 +112,23 @@ export function calculateTrustScore(url: string): TrustScoreResult {
     return { score, level: "excellent", threatLabel: "SAFE", factors, detectedPatterns }
   }
 
+  // Check always-dangerous patterns first (before database lookup)
+  const matchedDangerousPattern = alwaysDangerousPatterns.find((pattern) =>
+    normalizedUrl.includes(pattern)
+  )
+  if (matchedDangerousPattern) {
+    factors.push({
+      name: "Known Scam Pattern Detected",
+      impact: "negative",
+      description: `URL matches a confirmed Pi Network scam pattern: "${matchedDangerousPattern}"`,
+    })
+    detectedPatterns.push(`Scam pattern: ${matchedDangerousPattern}`)
+    return { score: 0, level: "dangerous", threatLabel: "PHISHING", factors, detectedPatterns }
+  }
+
+  // Extract just the domain from the input URL for matching
+  const normalizedDomain = normalizedUrl.split("/")[0]
+
   const exactMatch = scamDatabase.find((scam) => {
     const scamNormalized = scam.url
       .toLowerCase()
@@ -97,20 +137,23 @@ export function calculateTrustScore(url: string): TrustScoreResult {
       .replace(/\/$/, "")
       .replace(/^www\./, "")
 
-    const matches =
-      scamNormalized === normalizedUrl ||
-      normalizedUrl === scamNormalized ||
-      normalizedUrl.includes(scamNormalized) ||
-      scamNormalized.includes(normalizedUrl)
+    const scamDomain = scamNormalized.split("/")[0]
 
-    if (scam.url.includes("unlockpi") || scam.url.includes("minepidex")) {
-      console.log("[v0] Checking:", scam.url, "→", scamNormalized, "matches:", matches)
-    }
+    const matches =
+      // Exact full URL match
+      scamNormalized === normalizedUrl ||
+      // Domain-only match (catches trailing slash, extra paths etc.)
+      scamDomain === normalizedDomain ||
+      // Input URL contains scam URL
+      normalizedUrl.includes(scamNormalized) ||
+      // Scam URL contains input URL
+      scamNormalized.includes(normalizedUrl) ||
+      // Domain-level contains match
+      normalizedDomain.includes(scamDomain) ||
+      scamDomain.includes(normalizedDomain)
 
     return matches
   })
-
-  console.log("[v0] Exact match found:", exactMatch ? exactMatch.url : "none")
 
   if (exactMatch) {
     score = 0

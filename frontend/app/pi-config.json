@@ -1,0 +1,13 @@
+{
+  "name": "Safeπ - Pi Network Security",
+  "short_name": "Safeπ",
+  "description": "Real-time scam detection and phishing protection for Pi Network users. Protect your Pi assets from phishing, fake wallets, and fraudulent sites.",
+  "developer": {
+    "name": "bill81",
+    "wallet_address": "GD3ZBBGBLVPFSQUWR34KDI5OK6Y5JUGMPG2ZPOXQO2FYBLIM3VUQVKVG"
+  },
+  "app_url": "https://your-app-domain.vercel.app",
+  "payment_wallet": "GD3ZBBGBLVPFSQUWR34KDI5OK6Y5JUGMPG2ZPOXQO2FYBLIM3VUQVKVG",
+  "categories": ["security", "utilities"],
+  "version": "1.0.0"
+}

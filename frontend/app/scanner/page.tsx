@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { scamDatabase } from "@/lib/scam-database";
-import { fetchSuspiciousLinks } from "@/utils/fetchSuspiciousLinks";
 
 export default function ScannerPage() {
   const [url, setUrl] = useState("");
@@ -15,15 +14,8 @@ export default function ScannerPage() {
     setLoading(true);
     setResult(null);
 
-    // 1️⃣ Load Firestore suspicious links
-    const firestoreLinks = await fetchSuspiciousLinks();
-
-    // 2️⃣ Merge static + dynamic databases
-    const combined = [...scamDatabase, ...firestoreLinks];
-
-    // 3️⃣ Match against all known threats
     const lowercaseInput = url.toLowerCase();
-    const match = combined.find((entry) =>
+    const match = scamDatabase.find((entry) =>
       lowercaseInput.includes(entry.url.toLowerCase())
     );
 

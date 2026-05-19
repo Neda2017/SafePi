@@ -1,0 +1,17 @@
+{
+  "name": "Safeπ",
+  "short_name": "Safeπ",
+  "description": "Stay safe online with Safeπ - detect scam websites, phishing attempts, and fake logins in real time. Community-powered protection for Pi Network.",
+  "version": "1.0.0",
+  "icon": "/logo.png",
+  "app_url": "https://your-app-domain.com",
+  "permissions": ["payments", "user_info"],
+  "app_type": "webapp",
+  "category": "security",
+  "developer": {
+    "name": "bill81",
+    "url": "https://your-app-domain.com/about"
+  },
+  "privacy_policy_url": "https://your-app-domain.com/privacy",
+  "terms_of_service_url": "https://your-app-domain.com/terms"
+}

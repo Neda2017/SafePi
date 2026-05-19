@@ -77,7 +77,54 @@ export const translations = {
     quickLookup: "Quick Domain Lookup",
 
     // Footer
-    footerText: "Protected by AI • Community-powered • Real-time detection",
+    footerText: "Community-powered • Real-time detection • © 2025 bill81. All rights reserved.",
+
+    // Dashboard
+    dashboard: "Dashboard",
+    myActivity: "My Activity",
+    scansThisWeek: "Scans This Week",
+    threatsAvoided: "Threats Avoided",
+    safeSitesVisited: "Safe Sites Visited",
+    recentScans: "Recent Scans",
+    clearAllHistory: "Clear All History",
+    
+    // Admin
+    adminDashboard: "Admin Dashboard",
+    communityReports: "Community Reports",
+    userFeedback: "User Feedback",
+    pending: "Pending",
+    approved: "Approved",
+    rejected: "Rejected",
+    approve: "Approve",
+    reject: "Reject",
+    delete: "Delete",
+    noPendingReports: "No Pending Reports",
+    
+    // Education
+    educationCenter: "Education Center",
+    securityQuiz: "Security Quiz",
+    commonScams: "Common Scams",
+    bestPractices: "Best Practices",
+    caseStudies: "Case Studies",
+    startQuiz: "Start Quiz",
+    nextQuestion: "Next Question",
+    retakeQuiz: "Retake Quiz",
+    yourScore: "Your Score",
+    
+    // Help
+    helpFAQ: "Help & FAQ",
+    gettingStarted: "Getting Started",
+    whatIsSafepi: "What is Safeπ?",
+    howToUse: "How do I use Safeπ?",
+    backToHome: "Back to Home",
+    
+    // Feedback
+    sendFeedback: "Send Feedback",
+    yourName: "Your Name",
+    yourEmail: "Your Email",
+    rating: "Rating",
+    feedbackMessage: "Your Feedback",
+    submit: "Submit",
   },
   es: {
     // Header
@@ -157,7 +204,54 @@ export const translations = {
     quickLookup: "Búsqueda Rápida de Dominio",
 
     // Footer
-    footerText: "Protegido por IA • Impulsado por la comunidad • Detección en tiempo real",
+    footerText: "Impulsado por la comunidad • Detección en tiempo real • © 2025 bill81. Todos los derechos reservados.",
+
+    // Dashboard
+    dashboard: "Panel",
+    myActivity: "Mi Actividad",
+    scansThisWeek: "Escaneos Esta Semana",
+    threatsAvoided: "Amenazas Evitadas",
+    safeSitesVisited: "Sitios Seguros Visitados",
+    recentScans: "Escaneos Recientes",
+    clearAllHistory: "Limpiar Todo el Historial",
+    
+    // Admin
+    adminDashboard: "Panel de Administrador",
+    communityReports: "Reportes de la Comunidad",
+    userFeedback: "Comentarios de Usuarios",
+    pending: "Pendiente",
+    approved: "Aprobado",
+    rejected: "Rechazado",
+    approve: "Aprobar",
+    reject: "Rechazar",
+    delete: "Eliminar",
+    noPendingReports: "No Hay Reportes Pendientes",
+    
+    // Education
+    educationCenter: "Centro Educativo",
+    securityQuiz: "Prueba de Seguridad",
+    commonScams: "Estafas Comunes",
+    bestPractices: "Mejores Prácticas",
+    caseStudies: "Casos de Estudio",
+    startQuiz: "Iniciar Prueba",
+    nextQuestion: "Siguiente Pregunta",
+    retakeQuiz: "Repetir Prueba",
+    yourScore: "Tu Puntuación",
+    
+    // Help
+    helpFAQ: "Ayuda y Preguntas Frecuentes",
+    gettingStarted: "Comenzando",
+    whatIsSafepi: "¿Qué es Safeπ?",
+    howToUse: "¿Cómo uso Safeπ?",
+    backToHome: "Volver al Inicio",
+    
+    // Feedback
+    sendFeedback: "Enviar Comentarios",
+    yourName: "Tu Nombre",
+    yourEmail: "Tu Correo Electrónico",
+    rating: "Calificación",
+    feedbackMessage: "Tus Comentarios",
+    submit: "Enviar",
   },
   zh: {
     // Header
@@ -237,7 +331,54 @@ export const translations = {
     quickLookup: "快速域名查询",
 
     // Footer
-    footerText: "AI保护 • 社区驱动 • 实时检测",
+    footerText: "社区驱动 • 实时检测 • © 2025 bill81. 保留所有权利。",
+
+    // Dashboard
+    dashboard: "仪表板",
+    myActivity: "我的活动",
+    scansThisWeek: "本周扫描",
+    threatsAvoided: "避免的威胁",
+    safeSitesVisited: "访问的安全网站",
+    recentScans: "最近扫描",
+    clearAllHistory: "清除所有历史",
+    
+    // Admin
+    adminDashboard: "管理仪表板",
+    communityReports: "社区报告",
+    userFeedback: "用户反馈",
+    pending: "待处理",
+    approved: "已批准",
+    rejected: "已拒绝",
+    approve: "批准",
+    reject: "拒绝",
+    delete: "删除",
+    noPendingReports: "无待处理报告",
+    
+    // Education
+    educationCenter: "教育中心",
+    securityQuiz: "安全测验",
+    commonScams: "常见诈骗",
+    bestPractices: "最佳实践",
+    caseStudies: "案例研究",
+    startQuiz: "开始测验",
+    nextQuestion: "下一题",
+    retakeQuiz: "重新测验",
+    yourScore: "你的分数",
+    
+    // Help
+    helpFAQ: "帮助和常见问题",
+    gettingStarted: "入门",
+    whatIsSafepi: "什么是Safeπ？",
+    howToUse: "如何使用Safeπ？",
+    backToHome: "返回首页",
+    
+    // Feedback
+    sendFeedback: "发送反馈",
+    yourName: "您的姓名",
+    yourEmail: "您的邮箱",
+    rating: "评分",
+    feedbackMessage: "您的反馈",
+    submit: "提交",
   },
   pt: {
     // Header
@@ -317,7 +458,54 @@ export const translations = {
     quickLookup: "Pesquisa Rápida de Domínio",
 
     // Footer
-    footerText: "Protegido por IA • Impulsionado pela comunidade • Detecção em tempo real",
+    footerText: "Impulsionado pela comunidade • Detecção em tempo real • © 2025 bill81. Todos os direitos reservados.",
+
+    // Dashboard
+    dashboard: "Painel",
+    myActivity: "Minha Atividade",
+    scansThisWeek: "Escaneamentos Esta Semana",
+    threatsAvoided: "Ameaças Evitadas",
+    safeSitesVisited: "Sites Seguros Visitados",
+    recentScans: "Escaneamentos Recentes",
+    clearAllHistory: "Limpar Todo Histórico",
+    
+    // Admin
+    adminDashboard: "Painel do Administrador",
+    communityReports: "Relatórios da Comunidade",
+    userFeedback: "Feedback dos Usuários",
+    pending: "Pendente",
+    approved: "Aprovado",
+    rejected: "Rejeitado",
+    approve: "Aprovar",
+    reject: "Rejeitar",
+    delete: "Excluir",
+    noPendingReports: "Nenhum Relatório Pendente",
+    
+    // Education
+    educationCenter: "Centro Educacional",
+    securityQuiz: "Quiz de Segurança",
+    commonScams: "Golpes Comuns",
+    bestPractices: "Melhores Práticas",
+    caseStudies: "Estudos de Caso",
+    startQuiz: "Iniciar Quiz",
+    nextQuestion: "Próxima Pergunta",
+    retakeQuiz: "Refazer Quiz",
+    yourScore: "Sua Pontuação",
+    
+    // Help
+    helpFAQ: "Ajuda e Perguntas Frequentes",
+    gettingStarted: "Começando",
+    whatIsSafepi: "O que é Safeπ?",
+    howToUse: "Como usar Safeπ?",
+    backToHome: "Voltar ao Início",
+    
+    // Feedback
+    sendFeedback: "Enviar Feedback",
+    yourName: "Seu Nome",
+    yourEmail: "Seu E-mail",
+    rating: "Avaliação",
+    feedbackMessage: "Seu Feedback",
+    submit: "Enviar",
   },
   fr: {
     // Header
@@ -398,7 +586,54 @@ export const translations = {
     quickLookup: "Recherche Rapide de Domaine",
 
     // Footer
-    footerText: "Protégé par IA • Alimenté par la communauté • Détection en temps réel",
+    footerText: "Alimenté par la communauté • Détection en temps réel • © 2025 bill81. Tous droits réservés.",
+
+    // Dashboard
+    dashboard: "Tableau de Bord",
+    myActivity: "Mon Activité",
+    scansThisWeek: "Scans Cette Semaine",
+    threatsAvoided: "Menaces Évitées",
+    safeSitesVisited: "Sites Sûrs Visités",
+    recentScans: "Scans Récents",
+    clearAllHistory: "Effacer Tout l'Historique",
+    
+    // Admin
+    adminDashboard: "Tableau de Bord Admin",
+    communityReports: "Rapports de la Communauté",
+    userFeedback: "Retours des Utilisateurs",
+    pending: "En Attente",
+    approved: "Approuvé",
+    rejected: "Rejeté",
+    approve: "Approuver",
+    reject: "Rejeter",
+    delete: "Supprimer",
+    noPendingReports: "Aucun Rapport en Attente",
+    
+    // Education
+    educationCenter: "Centre Éducatif",
+    securityQuiz: "Quiz de Sécurité",
+    commonScams: "Arnaques Courantes",
+    bestPractices: "Meilleures Pratiques",
+    caseStudies: "Études de Cas",
+    startQuiz: "Commencer le Quiz",
+    nextQuestion: "Question Suivante",
+    retakeQuiz: "Refaire le Quiz",
+    yourScore: "Votre Score",
+    
+    // Help
+    helpFAQ: "Aide et FAQ",
+    gettingStarted: "Démarrage",
+    whatIsSafepi: "Qu'est-ce que Safeπ ?",
+    howToUse: "Comment utiliser Safeπ ?",
+    backToHome: "Retour à l'Accueil",
+    
+    // Feedback
+    sendFeedback: "Envoyer un Retour",
+    yourName: "Votre Nom",
+    yourEmail: "Votre E-mail",
+    rating: "Évaluation",
+    feedbackMessage: "Votre Retour",
+    submit: "Soumettre",
   },
 }
 
